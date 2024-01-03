@@ -88,4 +88,4 @@ module.exports = {
     defaultScope: '',
     defaultSubject: ''
   }
-}
+};

@@ -3,7 +3,7 @@ export default {
     target: process.env.ENV_API_PROXY,
     changeOrigin: true,
     pathRewrite: {
-      '/dev-api': '',
-    },
-  },
-}
+      '/dev-api': ''
+    }
+  }
+};

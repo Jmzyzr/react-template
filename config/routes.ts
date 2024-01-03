@@ -11,23 +11,37 @@
  * @doc https://umijs.org/docs/guides/routes
  */
 export default [
-	{
-		path: '/',
-		redirect: '/home',
-	},
-	{
-		name: '首页',
-		path: '/home',
-		component: './Home',
-	},
-	{
-		name: '权限演示',
-		path: '/access',
-		component: './Access',
-	},
-	{
-		name: ' CRUD 示例',
-		path: '/table',
-		component: './Table',
-	},
-]
+  {
+    path: '/',
+    redirect: '/login'
+  },
+  {
+    name: '登录',
+    path: '/login',
+    component: './user/login',
+    layout: false
+  },
+  {
+    path: '*',
+    layout: false,
+    component: './404'
+  },
+  {
+    name: '首页',
+    path: '/home',
+    component: './home',
+    icon: 'iconfont icon-home'
+  },
+  {
+    name: '订单管理',
+    path: '/order',
+    icon: 'iconfont icon-resource',
+    component: './order/src/list'
+  },
+  {
+    name: '新增订单',
+    path: '/order/form',
+    component: './order/src/form',
+    hideInMenu: true
+  }
+];

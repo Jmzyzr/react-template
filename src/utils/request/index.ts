@@ -1,21 +1,13 @@
-import { TOKEN } from '@/constants'
-import { AxiosRequestConfig, request, RequestConfig } from '@umijs/max'
-import { message } from 'antd'
-import jwtDecode from 'jwt-decode'
-import { axiosCanceler } from './axiosCancel'
-import { disableGlobalErrorCode, ResultEnum } from './constants'
+import { TOKEN } from '@/constants';
+import { AxiosRequestConfig, history, request, RequestConfig } from '@umijs/max';
+import { message } from 'antd';
+import { axiosCanceler } from './axiosCancel';
+import { disableGlobalErrorCode, ResultEnum } from './constants';
 
-type JwtInfo = {
-  account_id: number
-  exp: number
-  roles: string
-  tenant_id: number
-  user_name: string
-}
 // 默认地址请求地址
-const successCode = [ResultEnum.SUCCESS, ResultEnum.SCRM_SUCCESS]
+const successCode = [ResultEnum.SUCCESS, ResultEnum.SCRM_SUCCESS];
 
-const codeMessage: any = {
+const codeMessage: Partial<Record<number, string>> = {
   400: '请求失败！请您稍后重试',
   401: '登录失效！请您重新登录',
   403: '当前账号无权限访问！',
@@ -25,122 +17,107 @@ const codeMessage: any = {
   500: '网络繁忙，请稍后再试',
   502: '网络繁忙，请稍后重试',
   503: '网络异常，请稍后再试',
-  504: '网络异常，请稍后重试',
-}
+  504: '网络异常，请稍后重试'
+};
 
-//请求前拦截
+// 请求前拦截
+// 配合jwt可以验证token过期时间，待接口加上jwt
 export const requestInterceptors: RequestConfig['requestInterceptors'] = [
   (options: AxiosRequestConfig) => {
-    axiosCanceler.addPending(options)
-    const baseUrl = PROCESS_IS_DEV ? '/dev-api' : ''
-    const authorization = localStorage.getItem(TOKEN)
-    try {
-      // 解析 jwt 过期时间，过期自动跳转登录
-      const jwtInfo: JwtInfo = jwtDecode(authorization!)
-      if (
-        Number.isInteger(jwtInfo.exp) &&
-        Date.now() > new Date(jwtInfo.exp * 1000).getTime()
-      ) {
-        // 登录回调方法
-        return
-      }
-    } catch (error) {
-      p// 登录回调方法
-      return
-    }
-    const tenant = localStorage.getItem('X-Tenant')
+    axiosCanceler.addPending(options);
+    const authorization = localStorage.getItem(TOKEN);
+
     const authHeader = {
-      Authorization: authorization,
-      'X-Tenant': tenant,
+      Authorization: authorization
+    };
+    if (!authorization) {
+      // 跳转登录
+      history.push('/login');
     }
-    if (!authorization || !tenant) return passportLogin()
     return {
       ...options,
-      url: `${baseUrl}${options?.url}`,
       headers: {
         ...options?.headers,
-        ...authHeader,
-      },
-    }
-  },
-]
+        ...authHeader
+      }
+    };
+  }
+];
 
 //响应拦截
 export const responseInterceptors: RequestConfig['responseInterceptors'] = [
   (response: any) => {
-    const { data, config } = response
+    const { data, config } = response;
+
     // 在请求结束后，移除本次请求
-    axiosCanceler.removePending(config, false)
-    const responseCode = data.code
-    const responseMessage = data.message
+    axiosCanceler.removePending(config, false);
+    const responseCode = data.code;
+    const responseMessage = data.message;
     // * 全局错误信息拦截区分
     if (responseCode && !successCode.includes(responseCode)) {
-      message.destroy()
-      !disableGlobalErrorCode.includes(responseCode) &&
-        message.error(responseMessage)
-      return Promise.reject(data)
+      message.destroy();
+      !disableGlobalErrorCode.includes(responseCode) && message.error(responseMessage);
+      return Promise.reject(data);
     }
-    return response
-  },
-]
+    return response;
+  }
+];
 
 //统一错误处理
 export const errorHandler = (error: any) => {
-  const { response } = error
+  const { response } = error;
+
   if (response && response.status === 401) {
-    message.destroy()
+    message.destroy();
     // message.error('登录失效！请您重新登录')
-    passportLogin()
-    return Promise.reject(error)
+    // 登录回调方法
+    return Promise.reject(error);
   }
   if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText
-    message.destroy()
-    message.error(errorText)
-    return Promise.reject(error)
+    const errorText = codeMessage[response.status] || response.statusText;
+    message.destroy();
+    message.error(errorText);
+    return Promise.reject(error);
   }
   // 超时
-  if (
-    error.code === 'ECONNABORTED' &&
-    (error.message as string)?.startsWith?.('timeout')
-  ) {
-    message.error('网络异常，请稍后再试')
-    throw error
+  if (error.code === 'ECONNABORTED' && (error.message as string)?.startsWith?.('timeout')) {
+    message.error('网络异常，请稍后再试');
+    throw error;
   }
   // 断网
   if (error.code === 'ERR_NETWORK') {
-    message.error('网络异常，请稍后再试')
-    throw error
+    message.error('网络异常，请稍后再试');
+    throw error;
   }
-  throw error
-}
+  throw error;
+};
 
 export class RequestApi {
   // * 常用请求方法封装
   get<T = any>(url: string, params?: any, options = {} as RequestConfig) {
-    return request<ResultData<T>>(url, {
+    return request<API.BaseResult<T>>(url, {
       method: 'GET',
       params: params,
-      ...(options || {}),
-    })
+      ...(options || {})
+    });
   }
   post<T = any>(url: string, body?: any, options = {} as RequestConfig) {
-    return request<ResultData<T>>(url, {
+    return request<API.BaseResult<T>>(url, {
       method: 'POST',
       data: body,
-      ...(options || {}),
-    })
+      ...(options || {})
+    });
   }
   delete<T = any>(url: string, body?: any, options = {} as RequestConfig) {
-    return request<ResultData<T>>(url, {
+    return request<API.BaseResult<T>>(url, {
       method: 'DELETE',
       data: body,
-      ...(options || {}),
-    })
+      ...(options || {})
+    });
   }
 }
 
-export default new RequestApi()
+export default new RequestApi();
 
 /**
  * 判断是否是取消请求导致的错误
@@ -148,5 +125,5 @@ export default new RequestApi()
  * @returns
  */
 export function isAxiosCancel(err: any) {
-  return !!err?.__CANCEL__
+  return !!err?.__CANCEL__;
 }

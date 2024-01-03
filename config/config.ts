@@ -12,15 +12,15 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    locale: false,
+    locale: false
   },
   valtio: {},
   lessLoader: {
     modifyVars: {
       // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
-      hack: `true; @import "@/assets/styles/var.less";`,
+      hack: `true; @import "@/assets/styles/var.less";`
     },
-    javascriptEnabled: true,
+    javascriptEnabled: true
   },
   /**
    * @name 开启 hash 模式
@@ -41,20 +41,20 @@ export default defineConfig({
    * @doc https://umijs.org/docs/api/config#ignoremomentlocale
    */
   ignoreMomentLocale: true,
-  	/**
-	 * @name 快速热更新配置
-	 * @description 一个不错的热更新组件，更新时可以保留 state
-	 */
-	fastRefresh: true,
-  	/**
-	 * @name 国际化插件
-	 * @doc https://umijs.org/docs/max/i18n
-	 */
-	locale: {
-		default: 'zh-CN',
-		antd: true,
-	},
-  define: {
-    ENV_BUILD_ENV: process.env.ENV_BUILD_ENV,
+  /**
+   * @name 快速热更新配置
+   * @description 一个不错的热更新组件，更新时可以保留 state
+   */
+  fastRefresh: true,
+  /**
+   * @name 国际化插件
+   * @doc https://umijs.org/docs/max/i18n
+   */
+  locale: {
+    default: 'zh-CN',
+    antd: true
   },
+  define: {
+    ENV_BUILD_ENV: process.env.ENV_BUILD_ENV
+  }
 });

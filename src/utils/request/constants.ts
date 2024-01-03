@@ -7,10 +7,10 @@ export enum ResultEnum {
   SCRM_SUCCESS = '100',
   NOSEARCH = 400000,
   ERROR = 500000,
-  OVERDUE = '102',
+  OVERDUE = '102'
 }
 
 /**
  * 不需要全局报错的错误码
  */
-export const disableGlobalErrorCode: number[] = []
+export const disableGlobalErrorCode: number[] = [];
