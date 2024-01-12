@@ -3,10 +3,8 @@ import routes from './routes';
 
 export default defineConfig({
   routes,
-  base: '/react_template_ui/',
-  publicPath: '/react_template_ui/',
-  title: 'cxr admin',
-  // npmClient: 'pnpm',
+  title: 'react admin',
+  npmClient: 'pnpm',
   metas: [{ name: 'referrer', content: 'no-referrer' }],
   antd: {},
   access: {},

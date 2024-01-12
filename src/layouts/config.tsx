@@ -15,7 +15,7 @@ const Settings: ProLayoutProps = {
   colorWeak: false,
   openKeys: false,
   splitMenus: false,
-  title: '醇鲜然乳业管理系统',
+  title: 'react template',
   iconfontUrl: '',
   token: {
     bgLayout: '#F2F3F5',
