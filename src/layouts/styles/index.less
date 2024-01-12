@@ -12,5 +12,81 @@
       margin-bottom: 0;
       color: @color-text-base;
     }
+
+    .ant-pro-layout-apps-icon {
+      position: absolute;
+      left: 210px;
+    }
+
+    // 菜单样式调整
+    .ant-layout-sider-children {
+      padding-top: 20px !important;
+
+      .ant-menu-inline-collapsed {
+        .ant-pro-base-menu-item-icon {
+          line-height: 32px !important;
+        }
+      }
+
+      .ant-pro-base-menu-inline-item-title {
+        gap: 12px;
+      }
+
+      .ant-pro-base-menu-inline-item-icon .iconfont {
+        display: block;
+      }
+
+      .ant-menu-item {
+        margin: 0;
+        padding-inline: 8px !important;
+        width: 100%;
+        margin-bottom: 6px;
+      }
+
+      .ant-menu-submenu-title {
+        padding-inline: 8px !important;
+        margin: 0 0 6px;
+        width: 100%;
+
+        .ant-menu-submenu-arrow {
+          inset-inline-end: 8px;
+          font-weight: lighter;
+          color: @color-text-tips;
+        }
+      }
+
+      .ant-menu-sub {
+        padding-inline-start: 0 !important;
+        margin-bottom: 6px;
+
+        .ant-menu-item-only-child {
+          padding-left: 36px !important;
+        }
+      }
+
+      .ant-menu-item-selected {
+        color: @color-base !important;
+      }
+
+      .ant-menu-submenu-selected {
+        .ant-pro-base-menu-inline-item-text-has-icon,
+        .iconfont {
+          color: #1b1f26;
+          font-weight: 600;
+        }
+
+        .ant-menu-submenu-arrow {
+          color: #1b1f26 !important;
+        }
+      }
+
+      .ant-menu-item-only-child:not(.ant-menu-item-selected),
+      .ant-menu-submenu-title {
+        &:hover {
+          background-color: #f7f8fa !important;
+        }
+      }
+    }
   }
+  // 菜单样式调整
 }

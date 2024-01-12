@@ -29,19 +29,35 @@ export default [
   {
     name: '首页',
     path: '/home',
-    component: './home',
+    component: './index',
     icon: 'iconfont icon-home'
-  },
-  {
-    name: '订单管理',
-    path: '/order',
-    icon: 'iconfont icon-resource',
-    component: './order/src/list'
   },
   {
     name: '新增订单',
     path: '/order/form',
     component: './order/src/form',
     hideInMenu: true
+  },
+  {
+    name: '系统管理',
+    path: '/system',
+    icon: 'iconfont icon-setting',
+    routes: [
+      {
+        name: '用户管理',
+        path: '/system/user',
+        component: './system/user/src/list'
+      },
+      {
+        name: '字典管理',
+        path: '/system/dict',
+        component: './system/dict/src/list'
+      },
+      {
+        name: '菜单管理',
+        path: '/system/menu',
+        component: './system/menu/src/list'
+      }
+    ]
   }
 ];

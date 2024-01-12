@@ -2,11 +2,14 @@ const colorPrimary = '#0173f7';
 const colorTitle = '#1b1f26';
 const colorText = '#4c5666';
 const colorTips = '#8d98a6';
+const fontFamily =
+  "sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'";
 
 const theme = {
   token: {
     colorPrimary,
-    colorText
+    colorText,
+    fontFamily
   },
   components: {
     Button: {
@@ -37,6 +40,12 @@ const theme = {
     Table: {
       cellPaddingInlineMD: 16,
       headerSplitColor: '#fafafa'
+    },
+    Tree: {
+      colorText,
+      titleHeight: 32,
+      nodeSelectedBg: 'transparent',
+      nodeHoverBg: 'transparent'
     }
   }
 };

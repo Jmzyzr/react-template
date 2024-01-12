@@ -1,0 +1,51 @@
+.UserTree {
+  width: 100%;
+  overflow: auto;
+
+  :global {
+    .icon-enterprise-solid,
+    .icon-folder {
+      color: #d5d9e0;
+    }
+
+    .ant-tree-switcher {
+      width: 10px;
+    }
+
+    .ant-tree-checkbox + span {
+      padding: 0;
+    }
+
+    .ant-tree-iconEle {
+      width: 22px !important;
+      margin-right: 2px;
+    }
+
+    .ant-tree-node-content-wrapper {
+      display: flex;
+      flex-wrap: nowrap;
+
+      .ant-tree-title {
+        word-break: keep-all;
+      }
+    }
+
+    .ant-tree-treenode-selected {
+      background-color: #f7f8fa;
+    }
+
+    .ant-tree-treenode {
+      padding: 0;
+
+      &:hover {
+        background-color: #f7fcfe;
+      }
+    }
+  }
+
+  .TreeNode {
+    width: 100%;
+    height: calc(100vh - 222px);
+    overflow: auto;
+  }
+}

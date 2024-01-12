@@ -1,5 +1,10 @@
 import { TOKEN } from '@/constants';
-import { AxiosRequestConfig, history, request, RequestConfig } from '@umijs/max';
+import {
+  AxiosRequestConfig,
+  history,
+  request,
+  RequestConfig
+} from '@umijs/max';
 import { message } from 'antd';
 import { axiosCanceler } from './axiosCancel';
 import { disableGlobalErrorCode, ResultEnum } from './constants';
@@ -56,7 +61,8 @@ export const responseInterceptors: RequestConfig['responseInterceptors'] = [
     // * 全局错误信息拦截区分
     if (responseCode && !successCode.includes(responseCode)) {
       message.destroy();
-      !disableGlobalErrorCode.includes(responseCode) && message.error(responseMessage);
+      !disableGlobalErrorCode.includes(responseCode) &&
+        message.error(responseMessage);
       return Promise.reject(data);
     }
     return response;
@@ -80,7 +86,10 @@ export const errorHandler = (error: any) => {
     return Promise.reject(error);
   }
   // 超时
-  if (error.code === 'ECONNABORTED' && (error.message as string)?.startsWith?.('timeout')) {
+  if (
+    error.code === 'ECONNABORTED' &&
+    (error.message as string)?.startsWith?.('timeout')
+  ) {
     message.error('网络异常，请稍后再试');
     throw error;
   }

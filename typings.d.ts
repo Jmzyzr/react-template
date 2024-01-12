@@ -26,3 +26,9 @@ declare interface SearchPage<T = any> {
   params: T;
   onChange?: (data: T) => void;
 }
+
+declare interface TableParams {
+  pageSize?: number;
+  current?: number;
+  keyword?: string;
+}

@@ -16,4 +16,5 @@ export type ScrollTableProps<T = any, U = any, ValueType = 'text'> = {
   scrollY?: number | string;
   searchRows?: number;
   elementsByClassName?: string;
+  defaultStyle?: boolean;
 } & Omit<ProTableProps<T, U, ValueType>, 'scrollY'>;

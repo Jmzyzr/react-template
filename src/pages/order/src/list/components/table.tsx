@@ -1,57 +1,49 @@
 import { ScrollTable } from '@/components/scrollTable';
 import { OrderSource } from '@/pages/order/enums';
-import { OrderListParams } from '@/pages/order/types';
+import { OrderColumns, OrderListParams } from '@/pages/order/types';
 import { GetPageList } from '@/services/order/index';
-import { ActionType, ParamsType, ProColumns, ProTableProps } from '@ant-design/pro-components';
+import { ActionType, ProColumns } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
 import { Button, Space, Typography } from 'antd';
-import { useEffect, useRef, useState } from 'react';
+import to from 'await-to-js';
+import { useRef } from 'react';
 
 const { Paragraph } = Typography;
 
 const DataTable = (props: SearchPage<OrderListParams>) => {
   const { params } = props;
-  const [loading, setLoading] = useState<boolean>(false);
   const tableRef = useRef<ActionType>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    tableRef?.current?.reload();
-  }, [params]);
-
-  const request: NonNullable<ProTableProps<any, ParamsType>['request']> = async (searchParams) => {
-    params.page_num = searchParams.current!;
-    params.page_size = searchParams.pageSize!;
-    setLoading(true);
-    return new Promise((resolve, reject) => {
-      GetPageList(params)
-        .then(({ data }) => {
-          resolve({
-            success: true,
-            data: data?.data,
-            total: data?.count
-          });
-        })
-        .catch(() => {
-          reject({
-            success: true,
-            data: [],
-            total: 0
-          });
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    });
+  const request = async ({ current, pageSize }: TableParams) => {
+    const [err, res] = await to(
+      GetPageList({
+        ...params,
+        ...{
+          page_num: current!,
+          page_size: pageSize!
+        }
+      })
+    );
+    if (err) return { success: false };
+    return {
+      success: true,
+      data: res.data?.data || [],
+      total: res.data?.count
+    };
   };
 
-  const columns: ProColumns[] = [
+  const columns: ProColumns<OrderColumns>[] = [
     {
       title: '订单编号',
       dataIndex: 'order_sn',
       width: 220,
       render: (_, record: any) => (
-        <Paragraph className="field-paragraph" style={{ width: 188 }} ellipsis={{ rows: 2, tooltip: record.order_sn }}>
+        <Paragraph
+          className="field-paragraph"
+          style={{ width: 188 }}
+          ellipsis={{ rows: 2, tooltip: record.order_sn }}
+        >
           {record.order_sn || '-'}
         </Paragraph>
       )
@@ -61,7 +53,11 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
       dataIndex: 'user_name',
       width: 152,
       render: (_, record: any) => (
-        <Paragraph className="field-paragraph" style={{ width: 120 }} ellipsis={{ rows: 2, tooltip: record.user_name }}>
+        <Paragraph
+          className="field-paragraph"
+          style={{ width: 120 }}
+          ellipsis={{ rows: 2, tooltip: record.user_name }}
+        >
           {record.user_name || '-'}
         </Paragraph>
       )
@@ -71,7 +67,11 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
       dataIndex: 'goods_name',
       width: 220,
       render: (_, record: any) => (
-        <Paragraph className="field-paragraph" style={{ width: 188 }} ellipsis={{ rows: 2, tooltip: record.goods_name }}>
+        <Paragraph
+          className="field-paragraph"
+          style={{ width: 188 }}
+          ellipsis={{ rows: 2, tooltip: record.goods_name }}
+        >
           {record.goods_name || '-'}
         </Paragraph>
       )
@@ -79,7 +79,9 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
     {
       title: '订单来源',
       dataIndex: 'order_source',
-      render: (_, record: any) => <span>{OrderSource[record.order_source]?.label}</span>,
+      render: (_, record: any) => (
+        <span>{OrderSource[record.order_source]?.label}</span>
+      ),
       width: 190
     },
     {
@@ -92,7 +94,11 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
       dataIndex: 'consignee',
       width: 220,
       render: (_, record: any) => (
-        <Paragraph className="field-paragraph" style={{ width: 188 }} ellipsis={{ rows: 2, tooltip: record.consignee }}>
+        <Paragraph
+          className="field-paragraph"
+          style={{ width: 188 }}
+          ellipsis={{ rows: 2, tooltip: record.consignee }}
+        >
           {record.consignee || '-'}
         </Paragraph>
       )
@@ -102,7 +108,11 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
       dataIndex: 'address',
       width: 220,
       render: (_, record: any) => (
-        <Paragraph className="field-paragraph" style={{ width: 188 }} ellipsis={{ rows: 2, tooltip: record.address }}>
+        <Paragraph
+          className="field-paragraph"
+          style={{ width: 188 }}
+          ellipsis={{ rows: 2, tooltip: record.address }}
+        >
           {record.address || '-'}
         </Paragraph>
       )
@@ -112,7 +122,11 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
       dataIndex: 'tracking_number',
       width: 220,
       render: (_, record: any) => (
-        <Paragraph className="field-paragraph" style={{ width: 188 }} ellipsis={{ rows: 2, tooltip: record.tracking_number }}>
+        <Paragraph
+          className="field-paragraph"
+          style={{ width: 188 }}
+          ellipsis={{ rows: 2, tooltip: record.tracking_number }}
+        >
           {record.tracking_number || '-'}
         </Paragraph>
       )
@@ -140,11 +154,16 @@ const DataTable = (props: SearchPage<OrderListParams>) => {
 
   return (
     <ScrollTable
+      actionRef={tableRef}
       columns={columns}
       request={request}
-      loading={loading}
+      params={params}
       headerTitle={
-        <Button key="primary" type="primary" onClick={() => navigate(`/order/form`)}>
+        <Button
+          key="primary"
+          type="primary"
+          onClick={() => navigate(`/order/form`)}
+        >
           新增
         </Button>
       }

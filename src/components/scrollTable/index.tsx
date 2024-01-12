@@ -5,6 +5,30 @@ import { ProTableConfig } from './config';
 import { ScrollTableParams, ScrollTableProps } from './types';
 
 /**
+ * 设置表格高度
+ * @param data
+ * @param height
+ */
+const setTableHeight = (data: ScrollTableParams, height: any) => {
+  let tableBody = data.ref.current?.getElementsByClassName('ant-table-body')[0];
+  if (tableBody) {
+    tableBody.style.display = 'block';
+    tableBody.style.height = height;
+    tableBody.style.overflow = Number(data.total) ? 'auto scroll' : 'hidden';
+  }
+
+  if (!Number(data.total)) {
+    let placeholder = data.ref.current?.getElementsByClassName('ant-table-placeholder')[0];
+    if (placeholder) {
+      placeholder.style.height = height;
+      placeholder.style.overflow = 'hidden';
+    } else {
+      tableBody.style.display = 'flex';
+    }
+  }
+};
+
+/**
  * 获取表格可视化高度
  * @param {number} extraHeight 默认底部分页64 + 底部边距24
  * @param {reactRef} ref Table所在的组件的ref
@@ -41,30 +65,6 @@ export const getTableAutoScroll = (data: ScrollTableParams) => {
 };
 
 /**
- * 设置表格高度
- * @param data
- * @param height
- */
-const setTableHeight = (data: ScrollTableParams, height: any) => {
-  let tableBody = data.ref.current?.getElementsByClassName('ant-table-body')[0];
-  if (tableBody) {
-    tableBody.style.display = 'block';
-    tableBody.style.height = height;
-    tableBody.style.overflow = Number(data.total) ? 'auto scroll' : 'hidden';
-  }
-
-  if (!Number(data.total)) {
-    let placeholder = data.ref.current?.getElementsByClassName('ant-table-placeholder')[0];
-    if (placeholder) {
-      placeholder.style.height = height;
-      placeholder.style.overflow = 'hidden';
-    } else {
-      tableBody.style.display = 'flex';
-    }
-  }
-};
-
-/**
  * ProTable 拓展自适应高度
  * @param props
  * @returns
@@ -76,6 +76,7 @@ export const ScrollTable: FC<ScrollTableProps> = (props) => {
   const headerRef = useRef<HTMLElement>();
   const headerSize = useSize(headerRef);
   const [total, setTotal] = useState(0);
+  const tableStyle = { height: 'calc(100vh - 300px)' };
 
   const state = {
     ref: scrollRef,
@@ -85,6 +86,21 @@ export const ScrollTable: FC<ScrollTableProps> = (props) => {
     defaultHeight: props.defaultHeight,
     total
   };
+
+  const onLoad = (dataSource: readonly any[]) => {
+    setTotal(dataSource.length ?? 0);
+    const defaultValue: ScrollTableParams = state;
+    if (dataSource?.length) {
+      defaultValue.total = dataSource?.length;
+    }
+
+    // 搜索条件展开时不做高度调整
+    if (collapse) setScrollY(getTableAutoScroll(defaultValue));
+    headerRef.current = scrollRef.current?.getElementsByClassName(
+      props.elementsByClassName || 'ant-table-thead'
+    )[0] as HTMLElement;
+  };
+
   useEffect(() => {
     if (collapse) setScrollY(getTableAutoScroll(state));
   }, []);
@@ -99,24 +115,17 @@ export const ScrollTable: FC<ScrollTableProps> = (props) => {
     setScrollY(getTableAutoScroll(state));
   }, [headerSize?.height]);
 
-  const onLoad = (dataSource: readonly any[]) => {
-    setTotal(dataSource.length ?? 0);
-    const defaultValue: ScrollTableParams = state;
-    if (dataSource?.length) {
-      defaultValue.total = dataSource?.length;
-    }
-
-    // 搜索条件展开时不做高度调整
-    if (collapse) setScrollY(getTableAutoScroll(defaultValue));
-    headerRef.current = scrollRef.current?.getElementsByClassName(props.elementsByClassName || 'ant-table-thead')[0] as HTMLElement;
-  };
-
   return (
     <div ref={scrollRef}>
       <ProTable
         {...ProTableConfig}
         {...props}
-        scroll={{ x: '100%', y: props.scrollY ? props.scrollY : scrollY, scrollToFirstRowOnChange: true }}
+        scroll={{
+          x: '100%',
+          y: props.scrollY ? props.scrollY : scrollY,
+          scrollToFirstRowOnChange: true
+        }}
+        tableStyle={props.defaultStyle ? tableStyle : {}}
         onLoad={onLoad}
       />
     </div>

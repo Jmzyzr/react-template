@@ -5,6 +5,7 @@ import { RunTimeLayoutConfig, history } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
 import ErrorBoundary from './components/errorBoundary';
+
 import config from './config';
 
 const onClick: MenuProps['onClick'] = ({ key }) => {
@@ -36,7 +37,12 @@ const LayoutConfig: RunTimeLayoutConfig = () => {
       return menuItems.map((item: any) => {
         return {
           ...item,
-          icon: typeof item.icon === 'string' && item.icon.indexOf('icon') > -1 ? <i className={`${item.icon}`} /> : item.icon
+          icon:
+            typeof item.icon === 'string' && item.icon.indexOf('icon') > -1 ? (
+              <i className={`${item.icon}`} />
+            ) : (
+              item.icon
+            )
         };
       });
     },

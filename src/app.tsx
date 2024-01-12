@@ -1,5 +1,9 @@
 import BaseLayout from '@/layouts/layout';
-import { errorHandler, requestInterceptors, responseInterceptors } from '@/utils/request';
+import {
+  errorHandler,
+  requestInterceptors,
+  responseInterceptors
+} from '@/utils/request';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
 import { App, ConfigProvider } from 'antd';
 import theme from './theme';

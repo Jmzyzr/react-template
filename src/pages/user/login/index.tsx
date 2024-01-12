@@ -1,6 +1,10 @@
 import storage from '@/utils/storage';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
+import {
+  LoginForm,
+  ProFormCheckbox,
+  ProFormText
+} from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { App } from 'antd';
 import styles from './styles/index.less';
