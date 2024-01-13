@@ -1,10 +1,10 @@
 import userIcon from '@/assets/images/icon/icon-user.png';
+import ErrorBoundary from '@/components/errorBoundary';
 import { LogoutOutlined } from '@ant-design/icons';
 import type { Settings } from '@ant-design/pro-components';
 import { RunTimeLayoutConfig, history } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
-import ErrorBoundary from './components/errorBoundary';
 
 import config from './config';
 

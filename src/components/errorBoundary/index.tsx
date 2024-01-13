@@ -5,10 +5,7 @@ import React from 'react';
 /**
  * 错误边界处理
  */
-class ErrorBoundary extends React.Component<
-  Record<string, any>,
-  { hasError: boolean; errorInfo: string }
-> {
+class ErrorBoundary extends React.Component<Record<string, any>, { hasError: boolean; errorInfo: string }> {
   state = { hasError: false, errorInfo: '' };
 
   static getDerivedStateFromError(error: Error) {
@@ -38,9 +35,7 @@ class ErrorBoundary extends React.Component<
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={
               <>
-                <p className="color-text-base">
-                  请刷新页面，若无法修复，请联系客服
-                </p>
+                <p className="color-text-base">请刷新页面，若无法修复，请联系客服</p>
                 <p className="color-text-tips">{this.getErrorMsg()}</p>
               </>
             }

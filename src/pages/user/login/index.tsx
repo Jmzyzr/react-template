@@ -1,10 +1,6 @@
 import storage from '@/utils/storage';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import {
-  LoginForm,
-  ProFormCheckbox,
-  ProFormText
-} from '@ant-design/pro-components';
+import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { App } from 'antd';
 import styles from './styles/index.less';
@@ -15,7 +11,7 @@ export default () => {
   return (
     <div className={styles.LoginForm}>
       <LoginForm
-        title="醇鲜然乳业管理系统"
+        title="react-template"
         containerStyle={{ height: '100vh', justifyContent: 'center' }}
         onFinish={async (values) => {
           console.log('values', values);
